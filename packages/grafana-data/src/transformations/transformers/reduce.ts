@@ -159,6 +159,16 @@ function reduceSeriesToRows(
         if (t) {
           f.type = t;
         }
+        // Reduced values may come from fields of different types (e.g. a numeric-looking
+        // string field next to a number field). Make sure a number field only holds numbers.
+        if (f.type === FieldType.number) {
+          for (let i = 0; i < f.values.length; i++) {
+            const v = f.values[i];
+            if (v != null && typeof v !== 'number') {
+              f.values[i] = Number(v);
+            }
+          }
+        }
       }
     }
 
